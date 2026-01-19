@@ -1,17 +1,13 @@
-#Imagen base con java 21
-FROM eclipse-temurin:21-jdk
-
-#Directorio de trabajo dentro del contenedor
+# Etapa 1: build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-#Copiar archivos del proyecto
-COPY . .
-
-#Construir el proyecto
-RUN ./mvnw clean package -DskipTests
-
-#Exponer el puerto
+# Etapa 2: runtime
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-#Ejecutar el JAR
-CMD ["java", "-jar", "target/curp-api-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
