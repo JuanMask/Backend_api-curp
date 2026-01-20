@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name= "deudores",
-    schema = "catalogo"
+    name= "deudores"/* ,
+    schema = "catalogo" */
 )
 
 public class Deudor {
@@ -73,3 +73,4 @@ public class Deudor {
     
 
 }
+
